@@ -3,5 +3,13 @@
 
     <string name="hello">Hello World, AndroidScrumPokerActivity!</string>
     <string name="app_name">Android Scrum Poker</string>
+    <string name="welcome">Welcome To Planning Poker</string>
+
+    <string name="enter_server"></string>
+    <string name="btn_server_connect">Connect</string>
+        
+    <string name="enter_username_default"></string>
+    <string name="btn_username_save">Save</string>
+    <string name="error_enter_username">Please enter a username!</string>
 
 </resources>
