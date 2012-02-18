@@ -1,11 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-	android:layout_height="fill_parent" >
-	<ListView 
-	    android:id="@+id/cardboard"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
-	    
-	</ListView>
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	 >
+	<RelativeLayout
+	    android:id="@+id/cardboardTopCardInfo" 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"
+	    android:background="#1BE039">
+		<TextView
+		    android:id="@+id/editText1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerHorizontal="true"
+		    android:layout_centerVertical="true" android:text="Not all participants chose their cards!" android:textColor="#000000" android:textSize="20sp">
+		</TextView>
+	</RelativeLayout>
+	<RelativeLayout
+	    android:id="@+id/cardboardCenterCardInfo" 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"
+	    android:background="#E01B6A" android:visibility="invisible">
+
+		<TextView
+		    android:id="@+id/editText2"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerHorizontal="true"
+		    android:layout_centerVertical="true" android:text="Noone has to talk to anyone, YAY!" android:textSize="20dp"/>
+
+	</RelativeLayout>
+	<RelativeLayout
+	    android:id="@+id/cardboardBottomCardInfo" 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"
+	    android:background="#871BE0" android:visibility="invisible">
+		<SeekBar
+		    android:id="@+id/seekBar1"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentBottom="true"
+		    android:layout_toLeftOf="@+id/button1" />
+
+		<Button
+		    android:id="@+id/button1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentBottom="true"
+		    android:layout_alignParentRight="true"
+		    android:text="Next Task" />
+
+		<TextView
+		    android:id="@+id/editText3"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_alignParentTop="true"
+		    android:layout_marginLeft="20dp"
+		    android:layout_marginTop="20dp"
+		    android:text="We're commiting ourselves to 12 hours!"
+		    android:textSize="20dp" />
+
+	</RelativeLayout>
 </LinearLayout>
