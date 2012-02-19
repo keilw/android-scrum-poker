@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -44,7 +45,8 @@ public class ASPBroadcastService extends Service {
 		try {
 			socket = new DatagramSocket(6000);
 			socket.setBroadcast(true);
-			DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), getBroadcastAddress(), 6000);
+			WifiManager wifi = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+			DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), getBroadcastAddress(wifi), 6000);
 			while (true) {
 				Log.d("com.rmgtug.scrumpoker", "Sending Broadcast");
 				socket.send(packet);
@@ -63,18 +65,33 @@ public class ASPBroadcastService extends Service {
 		return super.onStartCommand(intent, flags, startId);
 	}
 
-	InetAddress getBroadcastAddress() throws IOException {
-		WifiManager wifi = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
-		DhcpInfo dhcp = wifi.getDhcpInfo();
-		// handle null somehow
-
+	/**
+	 * get a WifiManager in your Activity:
+	 * WifiManager wifi = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+	 * 
+	 * @param wifiManager
+	 * @return
+	 * @throws IOException
+	 */
+	public static InetAddress getBroadcastAddress(WifiManager wifiManager) throws UnknownHostException {
+		
+		DhcpInfo dhcp = wifiManager.getDhcpInfo(); // handle null somehow
 		int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+		return ipFromInt(broadcast);
+	}
+ 
+	public static InetAddress getLocalIPAddress(WifiManager wifiManager) throws UnknownHostException {
+		DhcpInfo dhcp = wifiManager.getDhcpInfo(); // handle null somehow
+		return ipFromInt(dhcp.ipAddress);
+	}
+	
+	private static InetAddress ipFromInt(int ipFromDHCP) throws UnknownHostException {
 		byte[] quads = new byte[4];
 		for (int k = 0; k < 4; k++)
-			quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+			quads[k] = (byte) ((ipFromDHCP >> k * 8) & 0xFF);
 		return InetAddress.getByAddress(quads);
 	}
-
+	
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
