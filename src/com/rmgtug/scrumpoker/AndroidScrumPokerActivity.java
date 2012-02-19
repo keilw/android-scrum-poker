@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,22 +35,10 @@ public class AndroidScrumPokerActivity extends Activity implements OnClickListen
 	@Override
 	public void onClick(View v) {
 		// TODO Broadcast like there is no tomorrow!
-		String data = "test1343";
+		ASyncDing myDing = new ASyncDing();
+		myDing.execute(1L);
 		Log.d("com.rmgtug.scrumpoker", "Broadcast, my ass!");
-		DatagramSocket socket;
-		try {
-			socket = new DatagramSocket(1337);
 
-			socket.setBroadcast(true);
-			DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), getBroadcastAddress(), 1338);
-			socket.send(packet);
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	InetAddress getBroadcastAddress() throws IOException {
@@ -62,5 +51,30 @@ public class AndroidScrumPokerActivity extends Activity implements OnClickListen
 		for (int k = 0; k < 4; k++)
 			quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
 		return InetAddress.getByAddress(quads);
+	}
+
+	class ASyncDing extends AsyncTask<Long, Long, Long> {
+
+		@Override
+		protected Long doInBackground(Long... params) {
+			DatagramSocket socket;
+			String data = "test1343";
+			try {
+				socket = new DatagramSocket(1337);
+
+				socket.setBroadcast(true);
+				DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), getBroadcastAddress(), 1338);
+				socket.send(packet);
+				socket.close();
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return 1L;
+		}
+
 	}
 }
