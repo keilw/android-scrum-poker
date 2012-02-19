@@ -22,11 +22,10 @@ import android.util.Log;
 public class ASPBroadcastService extends Service implements Runnable {
 
 	String data;
-
 	Thread myBroadcastingThread;
 
-	DatagramSocket socket;
-
+	protected final static int BROADCAST_PORT = 6000;
+	
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -37,7 +36,7 @@ public class ASPBroadcastService extends Service implements Runnable {
 	public IBinder onBind(Intent intent) {
 		Log.d("com.rmgtug.scrumpoker", "Yay, i'm binded by the light!");
 		myBroadcastingThread = new Thread(this);
-		myBroadcastingThread.start();
+		myBroadcastingThread.start(); 
 		return null;
 	}
 
@@ -69,10 +68,7 @@ public class ASPBroadcastService extends Service implements Runnable {
 
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
-		socket.close();
 		myBroadcastingThread.interrupt();
-
 		super.onDestroy();
 	}
 
@@ -93,7 +89,7 @@ public class ASPBroadcastService extends Service implements Runnable {
 		 * Track if we are connected to the service
 		 */
 		public boolean connected;
-
+		
 		/**
 		 * The service we are connected to
 		 */
@@ -119,11 +115,12 @@ public class ASPBroadcastService extends Service implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		data = "ScrumPokerServer_" + Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		DatagramSocket socket = null;
 		try {
-			socket = new DatagramSocket(6000);
+			socket = new DatagramSocket(BROADCAST_PORT);
 			socket.setBroadcast(true);
 			WifiManager wifi = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
-			DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), getBroadcastAddress(wifi), 6000);
+			DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), getBroadcastAddress(wifi), BROADCAST_PORT);
 			while (true) {
 				Log.d("com.rmgtug.scrumpoker.ASPBroadcastService", "Sending Broadcast");
 				socket.send(packet);
@@ -138,6 +135,9 @@ public class ASPBroadcastService extends Service implements Runnable {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (socket !=null)
+				socket.close();
 		}
 	}
 
