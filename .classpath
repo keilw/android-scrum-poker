@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="dependencies/jetty-servlet-7.6.0.RC4.jar"/>
 	<classpathentry kind="lib" path="dependencies/jetty-util-7.6.0.RC4.jar"/>
 	<classpathentry kind="lib" path="dependencies/servlet-api-2.5.jar"/>
+	<classpathentry kind="lib" path="dependencies/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -16,4 +16,12 @@
         android:layout_height="match_parent"
         />
 
+    <TextView
+        android:id="@+id/estimationNumber"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="\?"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:gravity ="right"/>
+
 </LinearLayout>
