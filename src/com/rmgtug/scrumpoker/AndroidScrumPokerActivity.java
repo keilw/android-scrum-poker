@@ -19,7 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.rmgtug.scrumpoker.service.ASPBroadcastService;
-import com.rmgtug.scrumpoker.service.HelloWorldHandler;
+import com.rmgtug.scrumpoker.service.RestServiceHandler;
 
 public class AndroidScrumPokerActivity extends Activity implements ServiceConnection {
 
@@ -87,7 +87,7 @@ public class AndroidScrumPokerActivity extends Activity implements ServiceConnec
 		try {
 			WifiManager wifi = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 			InetAddress myIp = ASPBroadcastService.getLocalIPAddress(wifi);
-			jetty.setHandler(new HelloWorldHandler());
+			jetty.setHandler(new RestServiceHandler());
 			jetty.start();
 			
 			Toast.makeText(this, "started Web server @ " + myIp, Toast.LENGTH_LONG).show();
