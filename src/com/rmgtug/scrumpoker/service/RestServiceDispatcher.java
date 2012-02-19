@@ -47,6 +47,9 @@ public class RestServiceDispatcher extends AbstractHandler{
 			throw new ServletException("can't handle "+ requestUri);
 		
 		String handlerName = comp[1];
+		if (!routing.containsKey(handlerName))
+			throw new ServletException("no such handler: " + handlerName);
+
 		IHandler handler = routing.get(handlerName);
 		handler.handle(servletRequest, servletResponse);
 		

@@ -4,13 +4,25 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import android.os.Handler;
+import android.util.Log;
+
 import com.rmgtug.scrumpoker.SessionInfo;
 import com.rmgtug.scrumpoker.adapter.SessionListAdapter;
 
-import android.util.Log;
-
+/**
+ * is called when a new client connects us.
+ * 
+ * @author stadolf
+ */
 public class NewUserHandler implements IHandler{
-
+	
+	private Handler sessionListAdapterHandler;
+	public void setCallbackHandler(Handler sessionListAdapterHandler) {
+		this.sessionListAdapterHandler = sessionListAdapterHandler;
+		
+	}
+	
 	public void handle(HttpServletRequest req, HttpServletResponse res) throws ServletException {
 		
 		String requestUri = req.getRequestURI();
@@ -26,10 +38,11 @@ public class NewUserHandler implements IHandler{
 		if (success) {
 			res.setContentType("text/html");
 			res.setStatus(HttpServletResponse.SC_OK);
+			//update UI asynchronously
+			sessionListAdapterHandler.sendEmptyMessage(0);
 		} else {
 			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
-		
 	}
 	
 	/**
@@ -48,5 +61,7 @@ public class NewUserHandler implements IHandler{
 		
 		return true;
 	}
+
+
 	
 }

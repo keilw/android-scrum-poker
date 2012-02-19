@@ -12,10 +12,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.rmgtug.scrumpoker.adapter.SessionListAdapter;
@@ -23,11 +24,18 @@ import com.rmgtug.scrumpoker.service.ASPBroadcastService;
 import com.rmgtug.scrumpoker.service.NewUserHandler;
 import com.rmgtug.scrumpoker.service.RestServiceDispatcher;
 
+/**
+ * This is the Server activity. It runs a service that broadcasts the availability
+ * of a server. It launches a simple Jetty engine that serves incoming requests.
+ * 
+ * @author stadolf, mhachemer
+ *
+ */
 public class AndroidScrumPokerActivity extends Activity implements ServiceConnection {
 
-	ArrayAdapter<String> aa;
 	protected Server jetty = null;
 	ASPBroadcastService broadCastService = null;
+	Handler sessionListAdapterHandler;
 	
 	private final static int serverPort = 8081; //TODO: make configurable 
 	
@@ -36,12 +44,15 @@ public class AndroidScrumPokerActivity extends Activity implements ServiceConnec
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.masterboard);
+		SessionListAdapter.getInstance(getBaseContext()); //builds the adapter for the first time
 		
-		SessionListAdapter sla = SessionListAdapter.getInstance(getBaseContext());
-		String[] q = {"Norbert", "Stefan", "Marc", "Mario"};
-		for (String s : q) {
-			sla.addSessionItem(new SessionInfo(s, "dummyImage"));
-		}
+		sessionListAdapterHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				SessionListAdapter.getInstance(null).notifyDataSetChanged();
+			}
+		};
 	}
 	
 	@Override
@@ -89,6 +100,12 @@ public class AndroidScrumPokerActivity extends Activity implements ServiceConnec
 		startJetty();
 	} 
 	
+	public void addUserBtnClicked(View v) {
+		 SessionListAdapter inst = SessionListAdapter.getInstance(null);
+		 inst.addSessionItem(new SessionInfo("test", null));
+		 sessionListAdapterHandler.sendEmptyMessage(0);
+	}
+	
 	protected void startJetty(){
 		if (jetty == null)
 			jetty = new Server(serverPort);
@@ -97,7 +114,9 @@ public class AndroidScrumPokerActivity extends Activity implements ServiceConnec
 			InetAddress myIp = ASPBroadcastService.getLocalIPAddress(wifi);
 			RestServiceDispatcher dispatcher = new RestServiceDispatcher();
 			
-			dispatcher.addRoute("user", new NewUserHandler());
+			NewUserHandler nuHandler = new NewUserHandler();
+			nuHandler.setCallbackHandler(sessionListAdapterHandler); 
+			dispatcher.addRoute("user", nuHandler );
 			//dispatcher.addRoute("card", new CardHandler());
 			jetty.setHandler(dispatcher);
 			jetty.start();
