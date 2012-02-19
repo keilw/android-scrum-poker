@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.rmgtug.scrumpoker.adapter.CardAdapter;
 
-public class ClientAndroidScumPokerActivity extends Activity implements OnClickListener, OnItemClickListener {
+public class ClientAndroidScrumPokerActivity extends Activity implements OnClickListener, OnItemClickListener {
 
 	private GridView cardGrid = null;
 	

@@ -1,5 +1,7 @@
 package com.rmgtug.scrumpoker;
 
+import com.rmgtug.scrumpoker.net.PokerServer;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +14,9 @@ public class ServerClientSelectActivityList extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.server_client_select);
+		
+		PokerServer ps = new PokerServer();
+		ps.startServer();
 	}
 
 	@Override
@@ -23,7 +28,7 @@ public class ServerClientSelectActivityList extends ListActivity {
 			// FIXME: check if fragments available
 			intent.setClass(getApplicationContext(), AndroidScrumPokerActivity.class);
 		} else if (position == 1) {
-			intent.setClass(getApplicationContext(), ClientAndroidScumPokerActivity.class);
+			intent.setClass(getApplicationContext(), ClientAndroidScrumPokerActivity.class);
 		}
 		startActivity(intent);
 	}
