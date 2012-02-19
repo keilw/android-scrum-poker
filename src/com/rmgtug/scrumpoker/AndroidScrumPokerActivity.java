@@ -61,7 +61,7 @@ public class AndroidScrumPokerActivity extends Activity implements OnClickListen
 			String data = "test1343";
 			try {
 				socket = new DatagramSocket(1337);
-
+				
 				socket.setBroadcast(true);
 				DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), getBroadcastAddress(), 1338);
 				socket.send(packet);
