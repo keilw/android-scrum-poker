@@ -8,7 +8,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" 
         android:theme="@android:style/Theme.Black.NoTitleBar"> 	
-        <service android:name=".ASPServerBroadcastingService" />
+
         <activity
             android:label="@string/app_name"
             android:name=".ServerClientSelectActivityList" >
@@ -21,6 +21,7 @@
         
         <activity android:name=".AndroidScrumPokerActivity" />
         <activity android:name=".ClientAndroidScrumPokerActivity" />
+        <service android:name="com.rmgtug.scrumpoker.service.ASPBroadcastService" />
     </application>
     
 	<uses-permission android:name="android.permission.INTERNET" />

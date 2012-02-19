@@ -19,7 +19,7 @@ import android.os.IBinder;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
-public class ASPBroadcastService extends Service {
+public class ASPBroadcastService extends Service implements Runnable {
 
 	String data;
 
@@ -35,67 +35,44 @@ public class ASPBroadcastService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
+		Log.d("com.rmgtug.scrumpoker", "Yay, i'm binded by the light!");
+		myBroadcastingThread = new Thread(this);
+		myBroadcastingThread.start();
 		return null;
 	}
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		data = "ScrumPokerServer_" + Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-		try {
-			socket = new DatagramSocket(6000);
-			socket.setBroadcast(true);
-			WifiManager wifi = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
-			DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), getBroadcastAddress(wifi), 6000);
-			while (true) {
-				Log.d("com.rmgtug.scrumpoker", "Sending Broadcast");
-				socket.send(packet);
-				wait(100);
-			}
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return super.onStartCommand(intent, flags, startId);
-	}
-
 	/**
-	 * get a WifiManager in your Activity:
-	 * WifiManager wifi = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+	 * get a WifiManager in your Activity: WifiManager wifi = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 	 * 
 	 * @param wifiManager
 	 * @return
 	 * @throws IOException
 	 */
 	public static InetAddress getBroadcastAddress(WifiManager wifiManager) throws UnknownHostException {
-		
+
 		DhcpInfo dhcp = wifiManager.getDhcpInfo(); // handle null somehow
 		int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
 		return ipFromInt(broadcast);
 	}
- 
+
 	public static InetAddress getLocalIPAddress(WifiManager wifiManager) throws UnknownHostException {
 		DhcpInfo dhcp = wifiManager.getDhcpInfo(); // handle null somehow
 		return ipFromInt(dhcp.ipAddress);
 	}
-	
+
 	private static InetAddress ipFromInt(int ipFromDHCP) throws UnknownHostException {
 		byte[] quads = new byte[4];
 		for (int k = 0; k < 4; k++)
 			quads[k] = (byte) ((ipFromDHCP >> k * 8) & 0xFF);
 		return InetAddress.getByAddress(quads);
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		socket.close();
+		myBroadcastingThread.interrupt();
+
 		super.onDestroy();
 	}
 
@@ -136,6 +113,32 @@ public class ASPBroadcastService extends Service {
 			connected = false;
 		}
 
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		data = "ScrumPokerServer_" + Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		try {
+			socket = new DatagramSocket(6000);
+			socket.setBroadcast(true);
+			WifiManager wifi = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+			DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), getBroadcastAddress(wifi), 6000);
+			while (true) {
+				Log.d("com.rmgtug.scrumpoker.ASPBroadcastService", "Sending Broadcast");
+				socket.send(packet);
+				Thread.sleep(1000);
+			}
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
