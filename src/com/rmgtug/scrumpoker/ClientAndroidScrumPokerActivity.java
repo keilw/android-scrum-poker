@@ -98,7 +98,7 @@ public class ClientAndroidScrumPokerActivity extends Activity implements OnClick
 			
 			serverAddress.setText(serverHostAddress + ":" + serverPort);
 		} else {
-			serverAddress.setError("Coulnd't find any PokerServer!");
+			serverAddress.setError("Couldn't find any PokerServer!");
 		}
 	}
 	
