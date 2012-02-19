@@ -14,11 +14,10 @@ import com.rmgtug.scrumpoker.R;
 import com.rmgtug.scrumpoker.SessionInfo;
 
 public class SessionListAdapter extends BaseAdapter {
-
+	
 	protected static class ViewHolder {
 
 		ImageView iv1;
-
 		TextView tv2;
 
 		static int instances = 0;
@@ -29,11 +28,23 @@ public class SessionListAdapter extends BaseAdapter {
 	}
 
 	protected ArrayList<SessionInfo> sessions;
-
+	protected static SessionListAdapter _instance = null;
 	protected LayoutInflater inflater;
+	
+	/**
+	 * context can be null when you use it after view / fragment instantiation
+	 * 
+	 * @param baseContext
+	 * @return
+	 */
+	public static SessionListAdapter getInstance(Context baseContext) {
+		if (_instance == null) {
+			_instance = new SessionListAdapter(baseContext);
+		}
+		return _instance;
+	}
 
-	public SessionListAdapter(Context ctx) {
-		super();
+	private SessionListAdapter(Context ctx) {
 		sessions = new ArrayList<SessionInfo>();
 		inflater = LayoutInflater.from(ctx);
 	}
@@ -79,5 +90,9 @@ public class SessionListAdapter extends BaseAdapter {
 	public void addSessionItem(SessionInfo item) {
 		this.sessions.add(item);
 	}
+
+	
+
+	
 
 }

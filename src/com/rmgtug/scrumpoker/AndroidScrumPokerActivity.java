@@ -18,8 +18,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.rmgtug.scrumpoker.adapter.SessionListAdapter;
 import com.rmgtug.scrumpoker.service.ASPBroadcastService;
-import com.rmgtug.scrumpoker.service.RestServiceHandler;
+import com.rmgtug.scrumpoker.service.NewUserHandler;
+import com.rmgtug.scrumpoker.service.RestServiceDispatcher;
 
 public class AndroidScrumPokerActivity extends Activity implements ServiceConnection {
 
@@ -34,11 +36,27 @@ public class AndroidScrumPokerActivity extends Activity implements ServiceConnec
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.masterboard);
+		
+		SessionListAdapter sla = SessionListAdapter.getInstance(getBaseContext());
+		String[] q = {"Norbert", "Stefan", "Marc", "Mario"};
+		for (String s : q) {
+			sla.addSessionItem(new SessionInfo(s, "dummyImage"));
+		}
 	}
 	
 	@Override
 	protected void onDestroy() {
 		getApplicationContext().unbindService(this);
+
+		if (jetty != null) {
+			try {
+				jetty.stop();
+				jetty = null;
+			} catch (Exception e) {
+				Log.e("stefan", "Jetty couldn't stop:" + e);
+			}
+		}
+		
 		super.onDestroy();
 	}
 
@@ -63,31 +81,25 @@ public class AndroidScrumPokerActivity extends Activity implements ServiceConnec
 
 	}
 	
-	@Override
-	protected void onStop() {
-		
-		if (jetty != null) {
-			try {
-				jetty.stop();
-				jetty = null;
-			} catch (Exception e) {
-				Log.e("stefan", "Jetty couldn't stop:" + e);
-			}
-		}
-		super.onStop();
-	}
 	/**
 	 * handler for server Jetty button
 	 * @param v
 	 */
 	public void jettyBtnClicked(View v) {
-		
+		startJetty();
+	} 
+	
+	protected void startJetty(){
 		if (jetty == null)
 			jetty = new Server(serverPort);
 		try {
 			WifiManager wifi = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 			InetAddress myIp = ASPBroadcastService.getLocalIPAddress(wifi);
-			jetty.setHandler(new RestServiceHandler());
+			RestServiceDispatcher dispatcher = new RestServiceDispatcher();
+			
+			dispatcher.addRoute("user", new NewUserHandler());
+			//dispatcher.addRoute("card", new CardHandler());
+			jetty.setHandler(dispatcher);
 			jetty.start();
 			
 			Toast.makeText(this, "started Web server @ " + myIp, Toast.LENGTH_LONG).show();
@@ -98,9 +110,9 @@ public class AndroidScrumPokerActivity extends Activity implements ServiceConnec
 		} catch (Exception e) {
 			Log.e("com.rmgtug", "exception starting Web server: " + e);
 		}
-	} 
+	}
 	
-	
+
 	/*
 	 * the right but complicated way
 	 * 

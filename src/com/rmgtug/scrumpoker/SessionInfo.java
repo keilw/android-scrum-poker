@@ -4,8 +4,9 @@ public class SessionInfo {
 
 	protected String sessionName;
 	protected String imgDummy;
+	protected String ipAddress;
+	
 	public SessionInfo(String name, String image) {
-
 		sessionName = name;
 		imgDummy = image;
 	}
@@ -21,6 +22,11 @@ public class SessionInfo {
 	public void setImgDummy(String imgDummy) {
 		this.imgDummy = imgDummy;
 	}
-	
+	public String getIpAddress() {
+		return ipAddress;
+	}
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
 	
 }

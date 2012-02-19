@@ -1,6 +1,7 @@
 package com.rmgtug.scrumpoker.service;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,44 +22,37 @@ import android.util.Log;
  * could also use a ServletHandler to register real servlets. 
  */
 
-public class RestServiceHandler extends AbstractHandler{
+public class RestServiceDispatcher extends AbstractHandler{
 	 
 	protected final static String LOG_CAT = "com.rmgtug.scrumpoker";
+	
+	protected HashMap<String, IHandler> routing; 
+	
+	public RestServiceDispatcher() {
+		routing = new HashMap<String, IHandler>();
+	}
+	
+	public void addRoute(String route, IHandler handler) {
+		routing.put(route, handler);
+	}
 	
 	@Override
 	public void handle(String target, Request request, HttpServletRequest servletRequest,
             HttpServletResponse servletResponse) throws IOException, ServletException {
 	
 		Log.i(LOG_CAT, "req received: " +request.getRequestURI());
-		servletResponse.setContentType("text/html");
-        servletResponse.setStatus(HttpServletResponse.SC_OK);
-        String response = dispatch(request.getRequestURI());
-        
-        servletResponse.getWriter().println("<h2>Response:" +response + " </h2>");
-        ((Request) request).setHandled(true);
-	}
-	
-	public String dispatch(String requestUri) {
+		String requestUri = request.getRequestURI();
 		String[] comp = requestUri.split("/");
-		if ("user".equals(comp[0])) {
-			String userName = comp[1];
-			String action = comp[2];
-			String cardid = comp[3];
-			if ("setcard".equals(action)) 
-				return setCard(userName, cardid);
-		} 
+		if (comp == null || comp.length == 0)
+			throw new ServletException("can't handle "+ requestUri);
 		
-		return "No response";
+		String handlerName = comp[1];
+		IHandler handler = routing.get(handlerName);
+		handler.handle(servletRequest, servletResponse);
+		
+		((Request) request).setHandled(true);
+        
 	}
+
 	
-	/**
-	 * 
-	 * @param userName
-	 * @param cardId
-	 * @return a readable message
-	 */
-	protected String setCard(String userName, String cardId) {
-		Log.i("com.rmgtug", "set card "+cardId+" for "+userName+ " ");
-		return "Card " + cardId + " set for "+ userName;
-	}
 }
