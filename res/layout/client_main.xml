@@ -12,17 +12,16 @@
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.3"
-	        android:enabled="false"
-	        android:id="@+id/server"
-	        android:text="@string/enter_server"/>
+	        android:id="@+id/username"
+	        android:text="@string/enter_username_default"/>
 	   	<Button 
 	   	    android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.7"
-	   	    android:id="@+id/btn_server"
-	   	    android:text="@string/btn_server_connect"/>
+	   	    android:id="@+id/btn_username"
+	   	    android:text="Save"/>
 	</LinearLayout>
-	
+    
     <LinearLayout 
         android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
@@ -31,17 +30,18 @@
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.3"
-	        android:id="@+id/username"
-	        android:text="@string/enter_username_default" android:contentDescription="Type in your username"/>
+	        android:enabled="false"
+	        android:id="@+id/server"
+	        android:text="@string/enter_server"/>
 	   	<Button 
 	   	    android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.7"
-	   	    android:id="@+id/btn_username"
-	   	    android:text="Save"/>
-        
+	        android:enabled="false"
+	   	    android:id="@+id/btn_server"
+	   	    android:text="@string/btn_server_connect"/>
 	</LinearLayout>
-    
+	
     <GridView
         android:id="@+id/cardView"
         android:layout_width="match_parent"

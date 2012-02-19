@@ -7,13 +7,9 @@
     
     <string-array name="card_values">
         <item>C</item>
-        
         <item>\?</item>
-        
         <item>&#48;</item>
-        
         <item>&#189;</item>
-        
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -23,6 +19,5 @@
         <item>20</item>
         <item>40</item>
         <item>100</item>
-        
     </string-array>   
 </resources>

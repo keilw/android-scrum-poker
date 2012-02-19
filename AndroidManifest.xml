@@ -21,6 +21,7 @@
         
         <activity android:name=".AndroidScrumPokerActivity" />
         <activity android:name=".ClientAndroidScrumPokerActivity" />
+        
         <service android:name="com.rmgtug.scrumpoker.service.ASPBroadcastService" />
     </application>
     
