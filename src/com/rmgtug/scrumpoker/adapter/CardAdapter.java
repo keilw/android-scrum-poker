@@ -11,17 +11,18 @@ import com.rmgtug.scrumpoker.R;
 
 public class CardAdapter extends BaseAdapter {
 
-	public static final String[] CARD_VALUES = new String[]{"K","?","0","½","1","2","3","5","8","13","20","40","100"};
+	private final String[] cardValues;
 	
-	private LayoutInflater inflater;
+	private final LayoutInflater inflater;
 	
-	public CardAdapter(Context ctx) {
+	public CardAdapter(String[] values, Context ctx) {
+		cardValues = values;
 		inflater = LayoutInflater.from(ctx);
 	}
 	
 	@Override
 	public int getCount() {
-		return CARD_VALUES.length;
+		return cardValues!=null ? cardValues.length : 0;
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class CardAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		holder.cardNumber.setText(CARD_VALUES[position]);
+		holder.cardNumber.setText(cardValues[position]);
 		
 		return convertView;
 	}

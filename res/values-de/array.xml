@@ -1,19 +1,15 @@
 <resources>
     
     <string-array name="server_client_select">
-        <item>I am the Server</item>
-        <item>I am a Client</item>
+        <item>Ich bin ein Server</item>
+        <item>Ich bin ein Client</item>
     </string-array>
     
     <string-array name="card_values">
-        <item>C</item>
-        
-        <item>\?</item>
-        
-        <item>&#48;</item>
-        
-        <item>&#189;</item>
-        
+        <item>K</item>       
+        <item>\?</item>      
+        <item>&#48;</item>        
+        <item>&#189;</item>        
         <item>1</item>
         <item>2</item>
         <item>3</item>

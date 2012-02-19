@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="hello">Hallo Welt, AndroidScrumPokerActivity!</string>
+    <string name="app_name">Android Scrum Poker</string>
+    <string name="welcome">Willkommen beim Planning Poker</string>
+    <string name="enter_server">Bitte einen Servernamen eingeben</string>
+    <string name="btn_server_connect">Verbinden</string>
+    <string name="enter_username_default">Benutzername</string>
+    <string name="btn_username_save">Speichern</string>
+    <string name="error_enter_username">Bitte einen Benutzernamen eingeben!</string>
+</resources>

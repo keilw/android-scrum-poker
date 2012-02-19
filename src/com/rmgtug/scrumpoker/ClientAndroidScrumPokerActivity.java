@@ -25,7 +25,8 @@ import com.rmgtug.scrumpoker.adapter.CardAdapter;
 import com.rmgtug.scrumpoker.net.ServerPacketListener;
 
 public class ClientAndroidScrumPokerActivity extends Activity implements OnClickListener, OnItemClickListener, ServerPacketListener {
-
+	private String[] cardArray = null;
+	
 	private GridView cardGrid = null;
 	
 	private EditText userName, serverAddress = null;
@@ -44,9 +45,9 @@ public class ClientAndroidScrumPokerActivity extends Activity implements OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.client_main);
-        
+        cardArray = getResources().getStringArray(R.array.card_values);
         cardGrid = (GridView) findViewById(R.id.cardView);
-        cardGrid.setAdapter(new CardAdapter(getBaseContext()));
+        cardGrid.setAdapter(new CardAdapter(cardArray, getBaseContext()));
         cardGrid.setOnItemClickListener(this);
         
         userName = (EditText)findViewById(R.id.username);
@@ -62,7 +63,7 @@ public class ClientAndroidScrumPokerActivity extends Activity implements OnClick
 
 	@Override
 	public void onItemClick(AdapterView<?> av, View view, int position, long id) {
-		Toast.makeText(getBaseContext(), CardAdapter.CARD_VALUES[position], Toast.LENGTH_SHORT).show();
+		Toast.makeText(getBaseContext(), getResources().getStringArray(R.array.card_values)[position], Toast.LENGTH_SHORT).show();
 	}
 	
 	@Override
